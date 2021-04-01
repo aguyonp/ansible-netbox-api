@@ -1,0 +1,31 @@
+---
+# LIST ALL Interfaces
+
+- hosts: all #Inventory
+#  become: true #As a suoder
+  vars_files: sshkeys.yml #File contain private key
+  vars:
+    ansible_ssh_private_key_file: "{{ defaultubuntu }}" #Private key path var
+  remote_user: ubuntu #Connect as
+
+#List IP
+  tasks:
+  - name: Execute the command in remote shell; stdout goes to the specified file on the remote
+    script: getcards.sh
+    register: out
+  - debug: msg="{{ out.stdout_lines }}"
+
+  - name: Print all available facts
+    debug:
+      var: ansible_facts
+  
+  - name: Sending GatheringFacts to netbox api
+    uri:
+      url: http://glpi-srv.mshome.net:5000/facts
+      # user: your_username
+      # password: your_pass
+      method: POST
+      body: "{{ ansible_facts }}"
+      # force_basic_auth: yes  
+      status_code: 201
+      body_format: json

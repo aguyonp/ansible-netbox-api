@@ -1,0 +1,7 @@
+version: "3.5"
+
+services:
+  netbox_api:
+    build: .
+    ports: 
+      - "5000:5000"
