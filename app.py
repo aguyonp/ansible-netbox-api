@@ -10,7 +10,7 @@ vm_hostname=""
 vm_ram=""
 vm_cpu=""
 vm_interfaces=[]
-vm_ip=[]
+vm_ip={}
 #Facts_VARS
 
 @app.route('/')
@@ -42,11 +42,11 @@ def post_respond():
             vm_interfaces.append(interface)
         
         #Assing ip to interface in vm_ip array array
-        # for interface in vm_interfaces:
-        #     print(interface) ; sys.stdout.flush()
-        #     interface = slice(interface)
-        #     vm_ip[interface] ="LOL"
-            # print(vm_ip[interface]) ; sys.stdout.flush()
+        for interface in vm_interfaces:
+            print(interface) ; sys.stdout.flush()
+            #interface = slice(interface)
+            vm_ip[interface] = req['br-886c2dcfa026']['ipv4']['address']
+            print(vm_ip[interface]) ; sys.stdout.flush()
 
         #Return ok state to ansible
         return Response(status=201)
