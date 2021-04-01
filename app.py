@@ -42,10 +42,10 @@ def post_respond():
             vm_interfaces.append(interface)
         
         #Assing ip to interface in vm_ip array array
-        for interface in vm_interfaces:
-            print(interface) ; sys.stdout.flush()
-            interface = slice(interface)
-            vm_ip[interface] ="LOL"
+        # for interface in vm_interfaces:
+        #     print(interface) ; sys.stdout.flush()
+        #     interface = slice(interface)
+        #     vm_ip[interface] ="LOL"
             # print(vm_ip[interface]) ; sys.stdout.flush()
 
         #Return ok state to ansible
