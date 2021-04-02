@@ -68,12 +68,10 @@ def post_respond():
             print(interface) ; sys.stdout.flush()
             print(vm_ip[interface]) ; sys.stdout.flush()
 
-            result = nb.dcim.devices.create(
-                name="rtr-inet-seoul-01",
-                device_type="asr-1002-x",
-                device_role="internet-edge",
-                site="seoul-dc-01",
-            )
+        result = nb.virtualization.virtual-machines.create(
+            name=vm_hostname,
+            cluster="VM",
+        )
 
         print(result)
 
