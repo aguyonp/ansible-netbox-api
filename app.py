@@ -2,8 +2,15 @@ from flask import Flask, request, Response, render_template, abort
 
 import sys
 import json
+import pynetbox
 
 app = Flask(__name__)
+
+#Netbox_VARS
+netbox_url="https://netbox.ibanfirst.lan"
+netbox_token="9712245587739acb26ec34005bc4ead4934e7568"
+netbox_cert="certs/cert.pem"
+#Netbox_VARS
 
 #Facts_VARS
 vm_hostname=""
@@ -12,6 +19,9 @@ vm_cpu=""
 vm_interfaces=[]
 vm_ip={}
 #Facts_VARS
+
+#Netbox auth
+nb = pynetbox.api(url=netbox_url, private_key_file=netbox_cert, token=netbox_token)
 
 @app.route('/')
 def home():
@@ -52,6 +62,10 @@ def post_respond():
             
             print(interface) ; sys.stdout.flush()
             print(vm_ip[interface]) ; sys.stdout.flush()
+
+            all_prefixes = nb.ipam.prefixes.all()
+
+            print(all_prefixes)
 
         #Return ok state to ansible
         return Response(status=201)
