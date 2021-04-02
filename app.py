@@ -46,6 +46,11 @@ def post_respond():
         vm_ram = req['memory_mb']['real']['total']
         vm_cpu = req['processor_vcpus']
 
+        print("hostname= ",vm_hostname) ; sys.stdout.flush()
+        print("Ram= ",vm_ram) ; sys.stdout.flush()
+        print("CPU= ",vm_cpu) ; sys.stdout.flush()
+
+
         #Add every interfaces in vm_interface array
         for interface in req['interfaces']:
             vm_interfaces.append(interface)
@@ -57,7 +62,21 @@ def post_respond():
             try:
                 vm_ip[interface] = req[interface]['ipv4']['address']
             except:
+                print("Unable to find ip address") ; sys.stdout.flush()
                 vm_ip[interface] ="0.0.0.0"
+
+            print(interface) ; sys.stdout.flush()
+            print(vm_ip[interface]) ; sys.stdout.flush()
+
+            result = nb.dcim.devices.create(
+                name="rtr-inet-seoul-01",
+                device_type="asr-1002-x",
+                device_role="internet-edge",
+                site="seoul-dc-01",
+            )
+
+        print(result)
+
 
         #Return ok state to ansible
         return Response(status=201)
