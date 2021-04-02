@@ -3,6 +3,7 @@ from flask import Flask, request, Response, render_template, abort
 import sys
 import json
 import pynetbox
+import os
 
 app = Flask(__name__)
 
@@ -20,8 +21,10 @@ vm_interfaces=[]
 vm_ip={}
 #Facts_VARS
 
+#Trust SSL
+os.environ['REQUESTS_CA_BUNDLE'] = netbox_cert
 #Netbox auth
-nb = pynetbox.api(url=netbox_url, private_key_file=netbox_cert, token=netbox_token)
+nb = pynetbox.api(url=netbox_url, token=netbox_token)
 
 @app.route('/')
 def home():
@@ -59,13 +62,6 @@ def post_respond():
                 vm_ip[interface] = req[interface]['ipv4']['address']
             except:
                 vm_ip[interface] ="0.0.0.0"
-            
-            print(interface) ; sys.stdout.flush()
-            print(vm_ip[interface]) ; sys.stdout.flush()
-
-            all_prefixes = nb.ipam.prefixes.all()
-
-            print(all_prefixes)
 
         #Return ok state to ansible
         return Response(status=201)
