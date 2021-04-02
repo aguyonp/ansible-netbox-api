@@ -46,10 +46,6 @@ def post_respond():
         vm_ram = req['memory_mb']['real']['total']
         vm_cpu = req['processor_vcpus']
 
-        print('Hostname=', vm_hostname) ; sys.stdout.flush()
-        print(vm_ram ,'Mb') ; sys.stdout.flush()
-        print('CPU:', vm_cpu) ; sys.stdout.flush()
-
         #Add every interfaces in vm_interface array
         for interface in req['interfaces']:
             vm_interfaces.append(interface)
