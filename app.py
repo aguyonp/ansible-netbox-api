@@ -17,7 +17,7 @@ vm_ip={}
 def home():
    return render_template('index.html')
 
-@app.route('/facts', methods=['POST'])
+@app.route('/api/facts', methods=['POST'])
 def post_respond():
 
     json_req = json.dumps(request.json)

@@ -16,7 +16,7 @@
   
   - name: Sending GatheringFacts to netbox api
     uri:
-      url: http://glpi-srv.mshome.net:5000/facts
+      url: http://glpi-srv.mshome.net:5000/api/facts
       # user: your_username
       # password: your_pass
       method: POST
