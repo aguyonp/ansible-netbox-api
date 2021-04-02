@@ -43,9 +43,14 @@ def post_respond():
         
         #Assing ip to interface in vm_ip array array
         for interface in vm_interfaces:
+            
+            #If IPV4 is present, save it in the dic
+            try:
+                vm_ip[interface] = req[interface]['ipv4']['address']
+            except:
+                vm_ip[interface] ="0.0.0.0"
+            
             print(interface) ; sys.stdout.flush()
-            #interface = slice(interface)
-            vm_ip[interface] = req['br-886c2dcfa026']['ipv4']['address']
             print(vm_ip[interface]) ; sys.stdout.flush()
 
         #Return ok state to ansible
