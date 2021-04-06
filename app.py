@@ -97,7 +97,6 @@ def post_respond():
             print("Updating VM") ; sys.stdout.flush()
             modify_vm(vm_hostname, vm_cpu, vm_ram)
             #print("Could not create the VM, error: {}".format(str(e))) ; sys.stdout.flush()
-            
         #Return ok state to ansible
         return Response(status=201)
 
