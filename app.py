@@ -68,12 +68,18 @@ def post_respond():
             print(interface) ; sys.stdout.flush()
             print(vm_ip[interface]) ; sys.stdout.flush()
 
-        result = nb.virtualization.virtual-machines.create(
-            name=vm_hostname,
-            cluster="VM",
+        result = nb.virtualization.virtual_machines.create(
+                name=vm_hostname,
+                cluster="1",
+                vcpus=vm_cpu,
+                memory=vm_ram,
+                status="active"
         )
 
-        print(result)
+        #print(result) ; sys.stdout.flush()
+        print(pynetbox.core.endpoint.Endpoint('api')) ; sys.stdout.flush()
+        #print(pynetbox.core.endpoint.Endpoint('app')) ; sys.stdout.flush()
+        #print(pynetbox.core.endpoint.Endpoint('name')) ; sys.stdout.flush()
 
 
         #Return ok state to ansible
