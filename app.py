@@ -1,4 +1,5 @@
 from flask import Flask, request, Response, render_template, abort
+from pprint import pprint
 
 import sys
 import json
@@ -26,6 +27,25 @@ os.environ['REQUESTS_CA_BUNDLE'] = netbox_cert
 #Netbox auth
 nb = pynetbox.api(url=netbox_url, token=netbox_token)
 
+#APIFunctions
+def add_vm(vm_hostname, vm_cpu, vm_ram):
+    result = nb.virtualization.virtual_machines.create({
+        "name": vm_hostname,
+        "cluster": "1",
+        "vcpus": vm_cpu,
+        "memory": vm_ram,
+        "status": "active"
+    })
+def modify_vm(vm_hostname, vm_cpu, vm_ram):
+    result = nb.virtualization.virtual_machines.get(name=vm_hostname)
+    result.update({
+        "vcpus": vm_cpu,
+        "memory": vm_ram,
+        "status": "active"
+    })
+    pprint(result) ; sys.stdout.flush()
+#APIFunctions
+
 @app.route('/')
 def home():
    return render_template('index.html')
@@ -46,9 +66,9 @@ def post_respond():
         vm_ram = req['memory_mb']['real']['total']
         vm_cpu = req['processor_vcpus']
 
-        print("hostname= ",vm_hostname) ; sys.stdout.flush()
-        print("Ram= ",vm_ram) ; sys.stdout.flush()
-        print("CPU= ",vm_cpu) ; sys.stdout.flush()
+        # print("hostname= ",vm_hostname) ; sys.stdout.flush()
+        # print("Ram= ",vm_ram) ; sys.stdout.flush()
+        # print("CPU= ",vm_cpu) ; sys.stdout.flush()
 
 
         #Add every interfaces in vm_interface array
@@ -62,26 +82,22 @@ def post_respond():
             try:
                 vm_ip[interface] = req[interface]['ipv4']['address']
             except:
-                print("Unable to find ip address") ; sys.stdout.flush()
+                # print("Unable to find ip address") ; sys.stdout.flush()
                 vm_ip[interface] ="0.0.0.0"
 
-            print(interface) ; sys.stdout.flush()
-            print(vm_ip[interface]) ; sys.stdout.flush()
+            # print(interface) ; sys.stdout.flush()
+            # print(vm_ip[interface]) ; sys.stdout.flush()
 
-        result = nb.virtualization.virtual_machines.create(
-                name=vm_hostname,
-                cluster="1",
-                vcpus=vm_cpu,
-                memory=vm_ram,
-                status="active"
-        )
+        try:
+            print("Add the VM to Netbox if it does not exist") ; sys.stdout.flush()
+            add_vm(vm_hostname, vm_cpu, vm_ram)
 
-        #print(result) ; sys.stdout.flush()
-        print(pynetbox.core.endpoint.Endpoint('api')) ; sys.stdout.flush()
-        #print(pynetbox.core.endpoint.Endpoint('app')) ; sys.stdout.flush()
-        #print(pynetbox.core.endpoint.Endpoint('name')) ; sys.stdout.flush()
-
-
+        except pynetbox.RequestError as e:
+            print("Failed to add VM, it already exist in netbox") ; sys.stdout.flush()
+            print("Updating VM") ; sys.stdout.flush()
+            modify_vm(vm_hostname, vm_cpu, vm_ram)
+            #print("Could not create the VM, error: {}".format(str(e))) ; sys.stdout.flush()
+            
         #Return ok state to ansible
         return Response(status=201)
 
