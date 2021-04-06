@@ -20,6 +20,7 @@ vm_ram=""
 vm_cpu=""
 vm_interfaces=[]
 vm_ip={}
+vm_id=0
 #Facts_VARS
 
 #Trust SSL
@@ -36,14 +37,29 @@ def add_vm(vm_hostname, vm_cpu, vm_ram):
         "memory": vm_ram,
         "status": "active"
     })
+    global vm_id
+    vm_id = result["id"]
+
 def modify_vm(vm_hostname, vm_cpu, vm_ram):
     result = nb.virtualization.virtual_machines.get(name=vm_hostname)
+    global vm_id
+    vm_id = result["id"]
     result.update({
         "vcpus": vm_cpu,
         "memory": vm_ram,
         "status": "active"
     })
-    pprint(result) ; sys.stdout.flush()
+
+def addinterface_vm(vm_id, vm_interfaces):
+    print(vm_id) ; sys.stdout.flush()
+    for interface in vm_interfaces:
+        try:
+            result = nb.virtualization.interfaces.create({
+                "virtual_machine": vm_id,
+                "name": interface
+            })
+        except Exception:
+            pass
 #APIFunctions
 
 @app.route('/')
@@ -97,6 +113,10 @@ def post_respond():
             print("Updating VM") ; sys.stdout.flush()
             modify_vm(vm_hostname, vm_cpu, vm_ram)
             #print("Could not create the VM, error: {}".format(str(e))) ; sys.stdout.flush()
+
+        print("Add interfaces to vm", vm_hostname) ; sys.stdout.flush()
+        addinterface_vm(vm_id, vm_interfaces)
+        
         #Return ok state to ansible
         return Response(status=201)
 
