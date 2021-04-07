@@ -6,5 +6,5 @@ services:
     ports: 
       - "5000:5000"
     environment:
-      - NETBOX_URL=LOL
-      - NETBOX_TOKEN=Yeah
+      - NETBOX_URL=https://netbox.ibanfirst.lan
+      - NETBOX_TOKEN=9712245587739acb26ec34005bc4ead4934e7568

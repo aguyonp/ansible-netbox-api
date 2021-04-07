@@ -8,8 +8,8 @@ import os
 app = Flask(__name__)
 
 #Netbox_VARS
-netbox_url="https://netbox.ibanfirst.lan"
-netbox_token="9712245587739acb26ec34005bc4ead4934e7568"
+netbox_url=""
+netbox_token=""
 netbox_cert="certs/cert.pem"
 #Netbox_VARS
 
