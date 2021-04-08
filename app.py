@@ -1,4 +1,6 @@
 from flask import Flask, request, Response, render_template, abort
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
 
 import sys
 import json
@@ -6,6 +8,11 @@ import pynetbox
 import os
 
 app = Flask(__name__)
+auth = HTTPBasicAuth()
+
+users = {
+    "john": generate_password_hash("hello")
+}
 
 #Netbox_VARS
 netbox_url=""
@@ -72,12 +79,18 @@ def addinterface_ip_vm(vm_id, vm_ip):
             pass
 
 #APIFunctions
+@auth.verify_password
+def verify_password(username, password):
+    if username in users and \
+            check_password_hash(users.get(username), password):
+        return username
 
 @app.route('/')
 def home():
    return render_template('index.html')
 
 @app.route('/api/facts', methods=['POST'])
+@auth.login_required
 def post_respond():
 
     json_req = json.dumps(request.json)

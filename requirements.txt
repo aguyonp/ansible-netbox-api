@@ -1,2 +1,4 @@
 flask
 pynetbox
+flask_httpauth
+werkzeug
