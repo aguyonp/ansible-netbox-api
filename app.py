@@ -7,11 +7,12 @@ import json
 import pynetbox
 import os
 
+
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 
 users = {
-    "john": generate_password_hash("hello")
+    "admin": generate_password_hash("admin")
 }
 
 #Netbox_VARS

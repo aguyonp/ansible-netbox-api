@@ -2,9 +2,11 @@ version: "3.5"
 
 services:
   netbox_api:
-    build: .
+    image: ASSIGNIT
     ports: 
       - "5000:5000"
     environment:
       - NETBOX_URL=https://netbox.ibanfirst.lan
-      - NETBOX_TOKEN=9712245587739acb26ec34005bc4ead4934e7568
+      - NETBOX_TOKEN=YOUR_NETBOX_TOKEN
+      - API_USERNAME=CHOOSE_USERNAME
+      - API_PASSWORD=CHOOSE_PASSWORD
