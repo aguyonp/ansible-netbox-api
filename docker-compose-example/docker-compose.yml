@@ -6,7 +6,7 @@ services:
     ports: 
       - "5000:5000"
     environment:
-      - NETBOX_URL=https://netbox.ibanfirst.lan
+      - NETBOX_URL=https://netbox.network.lan
       - NETBOX_TOKEN=YOUR_NETBOX_TOKEN
       - API_USERNAME=CHOOSE_USERNAME
       - API_PASSWORD=CHOOSE_PASSWORD
